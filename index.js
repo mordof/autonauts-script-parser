@@ -192,22 +192,12 @@ function convertResultsToTemplateCommands(results){
   for (const entry of results) {
     switch (entry.type) {
       case 'loopStart':
-        template += `{{loop|`;
-        if (entry.text === 'times') {
-          template += `type=times|`;
-        }
-        if (entry.text === 'until hear') {
-          template += `type=hear|`;
-        }
+        template += `{{loop${getLoopType(entry)}|`;
         if (entry.details[1] && entry.details[1].loopBreaks) {
           template += `fail=|`;
         }
         if (entry.details[1]) {
           if (entry.details[1].until) {
-            
-            template += `type=?|`;
-            template += `label=${entry.details[0]}|`;
-
             if (entry.details[1].not) {
               template += `not=|`
             }
@@ -538,4 +528,17 @@ function getPixelInEntry(x, y, entry) {
   const start = y * lineLength + (x * 4);
   const end = start + 4;
   return entry.slice(start, end);
+}
+
+function getLoopType(entry) {
+  const text = entry.details[0];
+  switch(text) {
+    default: return `|type=?|label=${text}`;
+    case 'forever!': return ''; // Loop template defaults to "forever"
+    case 'backpack':
+    case 'hands':
+    case 'held object': return `|type=${text}`;
+    case 'times':
+    case 'hear': return `|type=${text}|input=`; // TODO: input (eventually)
+  }
 }
