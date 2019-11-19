@@ -540,5 +540,6 @@ function getLoopType(entry) {
     case 'held object': return `|type=${text}`;
     case 'times':
     case 'hear': return `|type=${text}|input=`; // TODO: input (eventually)
+    case 'until hear': return `|type=hear|input=`; // TODO: input (eventually)
   }
 }
