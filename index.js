@@ -190,34 +190,25 @@ function convertResultsToTemplateCommands(results){
   let template = '';
 
   for (const entry of results) {
+    let value = false;
     switch (entry.type) {
       case 'loopStart':
-        template += `{{loop|`;
-        if (entry.text === 'times') {
-          template += `type=times|`;
-        }
-        if (entry.text === 'until hear') {
-          template += `type=hear|`;
-        }
+        template += `<br/>{{loop${getLoopType(entry)}`;
         if (entry.details[1] && entry.details[1].loopBreaks) {
-          template += `fail=|`;
+          template += `|fail=`;
         }
         if (entry.details[1]) {
           if (entry.details[1].until) {
-            
-            template += `type=?|`;
-            template += `label=${entry.details[0]}|`;
-
             if (entry.details[1].not) {
-              template += `not=|`
+              template += `|not=`
             }
             if (entry.details[1].empty) {
-              template += `empty=|`
+              template += `|empty=`
             }
           }
         }
 
-        template += `commands=`
+        template += `|commands=`
         break;
       case 'loopEnd':
         template += `}}`
@@ -229,8 +220,7 @@ function convertResultsToTemplateCommands(results){
       case 'add':
       case 'take':
       case 'pickup':
-        template += `{{Command|type=${entry.type}|value=${entry.details[0]}}}`;
-        break;
+        value = true;
       case 'shout':
       case 'use':
       case 'disengage':
@@ -242,7 +232,7 @@ function convertResultsToTemplateCommands(results){
       case 'swap':
       case 'drop':
       case 'wait':
-        template += `{{Command|type=${entry.type}}}`;
+        template += `<br/>{{Command|type=${entry.type}${value?`|value=${entry.details[0]}`:''}}}`;
         break;
     }
   }
@@ -538,4 +528,18 @@ function getPixelInEntry(x, y, entry) {
   const start = y * lineLength + (x * 4);
   const end = start + 4;
   return entry.slice(start, end);
+}
+
+function getLoopType(entry) {
+  const text = entry.details[0];
+  switch(text) {
+    default: return `|type=?|label=${text}`;
+    case 'forever!': return ''; // Loop template defaults to "forever"
+    case 'backpack':
+    case 'hands':
+    case 'held object': return `|type=${text}`;
+    case 'times':
+    case 'hear': return `|type=${text}|input=`; // TODO: input (eventually)
+    case 'until hear': return `|type=hear|input=`; // TODO: input (eventually)
+  }
 }
