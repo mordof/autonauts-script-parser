@@ -190,6 +190,7 @@ function convertResultsToTemplateCommands(results){
   let template = '';
 
   for (const entry of results) {
+    let value = false;
     switch (entry.type) {
       case 'loopStart':
         template += `<br/>{{loop${getLoopType(entry)}`;
@@ -219,8 +220,7 @@ function convertResultsToTemplateCommands(results){
       case 'add':
       case 'take':
       case 'pickup':
-        template += `<br/>{{Command|type=${entry.type}|value=${entry.details[0]}}}`;
-        break;
+        value = true;
       case 'shout':
       case 'use':
       case 'disengage':
@@ -232,7 +232,7 @@ function convertResultsToTemplateCommands(results){
       case 'swap':
       case 'drop':
       case 'wait':
-        template += `<br/>{{Command|type=${entry.type}}}`;
+        template += `<br/>{{Command|type=${entry.type}${value?`|value=${entry.details[0]}`:''}}}`;
         break;
     }
   }
