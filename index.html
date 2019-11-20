@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src='https://unpkg.com/tesseract.js@v2.0.0-beta.1/dist/tesseract.min.js'></script>
+    <script type="module" src="./modules/index.js"></script>
     <style>
       #output {
         overflow-wrap: break-word;
@@ -12,8 +12,6 @@
   </head>
   <body>
     <input type='file' accept='image/*' id="fileInput" />
-    <div id="output"></pre>
-    <script type="text/javascript" src="variables.js"></script>
-    <script type="text/javascript" src="index.js"></script>
+    <div id="output"></div>
   </body>
 </html>
