@@ -533,7 +533,7 @@ function getPixelInEntry(x, y, entry) {
 function getLoopType(entry) {
   const text = entry.details[0];
   switch(text) {
-    default: return `|type=?|label=${text}`;
+    default: return `|type=?|value=${text}`;
     case 'forever!': return ''; // Loop template defaults to "forever"
     case 'backpack':
     case 'hands':
