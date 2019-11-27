@@ -31,4 +31,6 @@ const colors = {
     background: [99, 46, 153, 255],
     darkBorder: [46, 18, 74, 255],
   },
-}
+};
+
+export default colors;
